@@ -12,8 +12,6 @@ V_MAKEFILE  := $(V_HEADNAME).mk
 
 V_SOURCES   := $(shell find vsrc -name "*.v")
 
-XILINX_PATH := "/mnt/c/Users/Lingl/Documents/FPGA_Projects/NPC/NPC.srcs/sources_1/new/"
-
 clean:
 	@echo "====================clean start========================="
 	rm -rf ./build
@@ -54,16 +52,11 @@ ysyxpush: ysyxclean
 	cd .. && git commit -m "update `date +'%Y-%m-%d %H:%M:%S'`"
 	cd .. && git push origin main
 
-push: copy2xilinx
+push:
 	@echo "====================push start=========================="
 	git add .
 	git commit -m "update `date +'%Y-%m-%d %H:%M:%S'`"
 	git push origin main
-
-copy2xilinx:
-	@echo "====================copy start=========================="
-	find ${XILINX_PATH} -type f ! -iname 'FPGA_*' -delete
-	rsync -av --exclude='cpp_*' vsrc/ ${XILINX_PATH}/
 
 ysyxclean:
 	@echo "====================clean ysyx=========================="
