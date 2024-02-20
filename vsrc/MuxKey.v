@@ -1,29 +1,9 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:
-// Engineer:
-//
-// Create Date:
-// Design Name:
-// Module Name: MuxKey
-// Project Name:
-// Target Devices:
-// Tool Versions:
-// Description:
-//
-// Dependencies:
-//
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 
 module MuxKey #(
-    NR_KEY   = 2,
-    KEY_LEN  = 1,
-    DATA_LEN = 1
+    NR_KEY   = 2,  //输入数量
+    KEY_LEN  = 1,  //选择线位宽
+    DATA_LEN = 1   //输出位宽
 ) (
     output reg [DATA_LEN-1:0] out,
     input [KEY_LEN-1:0] key,
