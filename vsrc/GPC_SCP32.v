@@ -61,4 +61,6 @@ module GPC_SCP32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   wire [31:0] imm_u = {inst[31], inst[30:20], inst[19:12], 12'b0};
   wire [31:0] imm_j = {{12{inst[31]}}, inst[19:12], inst[20], inst[30:25], inst[24:21], 1'b0};
 
+  
+
 endmodule
