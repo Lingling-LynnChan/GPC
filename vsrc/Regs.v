@@ -2,8 +2,8 @@
 
 module Regs #(
     WIDTH = 32,
-    ADDR_WIDTH = 5,
     NR_REGS = 32,
+    ADDR_WIDTH = 5,
     RESET_VAL = 0
 ) (
     input clk,  //时钟
