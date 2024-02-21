@@ -1,0 +1,23 @@
+module CSAdder #(  //Carry Save Adder 3-2
+    WIDTH = 32
+) (
+    input  [WIDTH-1:0] in1,
+    input  [WIDTH-1:0] in2,
+    input  [WIDTH-1:0] in3,
+    output [WIDTH-1:0] out,
+    output [WIDTH-1:0] carry
+);
+  generate
+    genvar i;
+    for (i = 0; i < WIDTH; i = i + 1) begin : gen
+      FullAdder FullAdder_inst (
+          .in1 (in1[i]),
+          .in2 (in2[i]),
+          .in3 (in3[i]),
+          .out (out[i]),
+          .cout(carry[i])
+      );
+    end
+  endgenerate
+endmodule
+
