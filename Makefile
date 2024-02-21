@@ -1,4 +1,4 @@
-TOP_MODULE  := GPC_SCP32
+TOP_MODULE  := Multiplier
 
 SIM_FILE    := main.cpp
 
@@ -12,7 +12,7 @@ V_MAKEFILE  := $(V_HEADNAME).mk
 
 V_SOURCES   := $(shell find vsrc -name "*.v")
 
-VERILATOR   := --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL
+VERILATOR   := --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL --Wno-PINCONNECTEMPTY
 
 clean:
 	@echo "====================clean start========================="
