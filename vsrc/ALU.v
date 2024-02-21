@@ -6,7 +6,7 @@ module ALU #(
     input [9:0] funct,  //{funct7,funct3}
     input [WIDTH-1:0] in1,
     input [WIDTH-1:0] in2,
-    output [WIDTH-1:0] out
+    output [WIDTH-1:0] out,
+    output valid//是否属于算数单元处理
 );
-
 endmodule
