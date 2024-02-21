@@ -1,4 +1,4 @@
-TOP_MODULE  := top
+TOP_MODULE  := GPC_SCP32
 
 SIM_FILE    := main.cpp
 
@@ -12,6 +12,8 @@ V_MAKEFILE  := $(V_HEADNAME).mk
 
 V_SOURCES   := $(shell find vsrc -name "*.v")
 
+VERILATOR   := --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL
+
 clean:
 	@echo "====================clean start========================="
 	rm -rf ./build
@@ -23,7 +25,7 @@ build: clean
 	riscv64-linux-gnu-gcc -march=${USE_MARCH} -mabi=${USE_MABI} -ffreestanding -nostdlib -static -Wl,-Ttext=0 -O2 -o build/c_obj/prog csrc/prog.c
 	riscv64-linux-gnu-objcopy -j .text -O binary build/c_obj/prog build/c_obj/prog.bin
 	@echo "====================verilator start====================="
-	verilator -Wall --trace --top-module ${TOP_MODULE} -cc ${V_SOURCES} --exe csrc/${SIM_FILE} --Mdir build --Wno-UNUSEDSIGNAL
+	verilator -Wall --trace --top-module ${TOP_MODULE} -cc ${V_SOURCES} --exe csrc/${SIM_FILE} --Mdir build ${VERILATOR}
 	@awk '/^CXXFLAGS =/ {print $0 " -Wno-unused-result"; found=1} !/^CXXFLAGS =/ {print $0} END {if (!found) print "CXXFLAGS = -Wno-unused-result"}' build/$(V_MAKEFILE) > build/$(V_MAKEFILE).tmp && mv build/$(V_MAKEFILE).tmp build/$(V_MAKEFILE)
 
 sim:
