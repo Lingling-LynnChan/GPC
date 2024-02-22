@@ -3,7 +3,6 @@
 module Multiplier32 (  //三十二位快速乘法器
     input  [31:0] in1,   //被乘数
     input  [31:0] in2,   //乘数
-    input         sign,  //是否有符号
     output [63:0] out    //积
 );
 
@@ -12,7 +11,7 @@ module Multiplier32 (  //三十二位快速乘法器
     //输入层
     wire [63:0] nums[32];
     for (i = 0; i < 32; i = i + 1) begin : NUMS_IN_GEN
-      assign nums[i] = in2[i] ? ({{32{sign ? in1[31] : 1'b0}}, in1} << i) : {64{1'b0}};
+      assign nums[i] = in2[i] ? ({32'b0, in1} << i) : {64{1'b0}};
     end
     //第一层
     wire [63:0] w1[21];  //u11 v11 u12 v12 ... u1a v1a [NUMS[30]]

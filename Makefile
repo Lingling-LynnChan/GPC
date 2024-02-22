@@ -1,4 +1,4 @@
-TOP_MODULE  := Multiplier32
+TOP_MODULE  := Adder
 
 SIM_FILE    := main.cpp
 

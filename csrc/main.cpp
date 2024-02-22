@@ -1,11 +1,12 @@
 #include <cstdint>
 #include <iostream>
 #include <random>
+#define NAME VAdder
 #ifndef _FAKE_VSCODE_LINT
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
-#include "VMultiplier32.h"  // 替换为顶层模块的文件名
+#include "VAdder.h"  // 替换为顶层模块的文件名
 #else
 // 欺骗代码提示，假装存在这些类
 typedef volatile uint64_t vluint64_t;
@@ -24,11 +25,8 @@ class VerilatedVcdC {
   void close() {}
   void dump(vluint64_t i) {}
 };
-struct VMultiplier32 {
-  uint32_t sign;
-  uint32_t in1;
-  uint32_t in2;
-  uint64_t out;
+struct NAME {
+  uint32_t in1, in2, cin, out, cout;
   void eval() {}
   void final() {}
   void trace(VerilatedVcdC *vcd, int i) {}
@@ -44,40 +42,18 @@ int main(int argc, char **argv) {
   Verilated::traceEverOn(true);
   init(argc, argv);
   // 实例化顶层模块
-  auto *top = new VMultiplier32;
+  auto *top = new NAME;
   VerilatedVcdC *vcd = new VerilatedVcdC;
   top->trace(vcd, 999);
   vcd->open("build/trace.vcd");
   // 仿真开始
   std::cout << "====================sim start===========================\n";
-  // 随机数
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<int32_t> distrib(0, INT32_MAX);  // 范围
-  int n = 100;                                                   // 仿真次数
-  int32_t hf[2], errnum = 0;                                     // 错误次数
-  while (n--) {
-    hf[0] = distrib(gen);
-    top->in1 = *(uint32_t *)&(hf[0]);  // 生成被乘数
-    hf[1] = distrib(gen);
-    top->in2 = *(uint32_t *)&(hf[1]);               // 生成乘数
-    int64_t ans = (int64_t)hf[0] * (int64_t)hf[1];  // 计算值
-    top->sign = 1;
-    top->eval();
-    if (top->out != ans) {
-      errnum++;
-      printf("SIGN: %d * %d = %ld\n", hf[0], hf[1], top->out);
-      printf("ERROR: ANSWER IS %ld\n", ans);
-    }
-    top->sign = 0;
-    top->eval();
-    if (top->out != ans) {
-      errnum++;
-      printf("UNSG: %u * %u = %lu\n", hf[0], hf[1], top->out);
-      printf("ERROR: ANSWER IS %ld\n", ans);
-    }
-  }
-  printf("HAS %d ERROR(s)\n", errnum);
+  top->in1 = UINT32_MAX;
+  top->in2 = UINT32_MAX;
+  top->cin = 1;
+  top->eval();
+  printf("%u + %u + _%u_ = %u + _%u_\n", top->in1, top->in2, top->cin, top->out,
+         top->cout);
   std::cout << "====================sim end=============================\n";
   // 释放资源
   vcd->close();
