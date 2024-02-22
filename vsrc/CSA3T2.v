@@ -1,11 +1,11 @@
-module CSAdder #(  //Carry Save Adder 3-2
+module CSA3T2 #(  //Carry Save Adder 3-2
     WIDTH = 32
 ) (
     input  [WIDTH-1:0] in1,
     input  [WIDTH-1:0] in2,
     input  [WIDTH-1:0] in3,
     output [WIDTH-1:0] out,
-    output [WIDTH-1:0] carry
+    output [WIDTH-1:0] cout
 );
   generate
     genvar i;
@@ -15,9 +15,8 @@ module CSAdder #(  //Carry Save Adder 3-2
           .in2 (in2[i]),
           .in3 (in3[i]),
           .out (out[i]),
-          .cout(carry[i])
+          .cout(cout[i])
       );
     end
   endgenerate
 endmodule
-

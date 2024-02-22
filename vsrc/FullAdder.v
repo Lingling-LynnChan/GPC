@@ -1,4 +1,4 @@
-module FullAdder (
+module FullAdder (  //一位全加器
     input  in1,
     input  in2,
     input  in3,
@@ -21,4 +21,3 @@ module FullAdder (
   );
   assign cout = carry[0] | carry[1];
 endmodule
-

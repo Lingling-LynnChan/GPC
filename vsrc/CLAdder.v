@@ -38,6 +38,13 @@ module CLAdder #(  //Carry-Lookahead Adder
           .in2(in2),
           .out({cout, out})
       );
+    end else if (WIDTH == 64) begin
+      Adder64 adder_inst (
+          .cin(cin),
+          .in1(in1),
+          .in2(in2),
+          .out({cout, out})
+      );
     end else begin
       initial begin
         $error("Unsupported WIDTH: %d. WIDTH must be 4, 8, 16, or 32.", WIDTH);
