@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module CLAdder #(  //Carry-Lookahead Adder
+module Adder #(  //Carry-Lookahead Adder
     WIDTH = 32
 ) (
     input              cin,
