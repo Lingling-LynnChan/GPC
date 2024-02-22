@@ -1,4 +1,4 @@
-TOP_MODULE  := CSAdder
+TOP_MODULE  := Multiplier32
 
 SIM_FILE    := main.cpp
 
