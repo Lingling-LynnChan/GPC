@@ -12,38 +12,43 @@ module Adder #(  //Carry-Lookahead Adder
   generate
     if (WIDTH == 4) begin
       Adder04 adder_inst (
-          .cin(cin),
-          .in1(in1),
-          .in2(in2),
-          .out({cout, out})
+          .cin (cin),
+          .in1 (in1),
+          .in2 (in2),
+          .out (out),
+          .cout(cout)
       );
     end else if (WIDTH == 8) begin
       Adder08 adder_inst (
-          .cin(cin),
-          .in1(in1),
-          .in2(in2),
-          .out({cout, out})
+          .cin (cin),
+          .in1 (in1),
+          .in2 (in2),
+          .out (out),
+          .cout(cout)
       );
     end else if (WIDTH == 16) begin
       Adder16 adder_inst (
-          .cin(cin),
-          .in1(in1),
-          .in2(in2),
-          .out({cout, out})
+          .cin (cin),
+          .in1 (in1),
+          .in2 (in2),
+          .out (out),
+          .cout(cout)
       );
     end else if (WIDTH == 32) begin
       Adder32 adder_inst (
-          .cin(cin),
-          .in1(in1),
-          .in2(in2),
-          .out({cout, out})
+          .cin (cin),
+          .in1 (in1),
+          .in2 (in2),
+          .out (out),
+          .cout(cout)
       );
     end else if (WIDTH == 64) begin
       Adder64 adder_inst (
-          .cin(cin),
-          .in1(in1),
-          .in2(in2),
-          .out({cout, out})
+          .cin (cin),
+          .in1 (in1),
+          .in2 (in2),
+          .out (out),
+          .cout(cout)
       );
     end else begin
       initial begin
