@@ -1,21 +1,21 @@
 `timescale 1ns / 1ps
 
 module Multiplier32 (  //三十二位快速乘法器
-    input  [31:0] in1,  //被乘数
-    input  [31:0] in2,  //乘数
-    output [63:0] out   //积
+    input  [31:0] in1,   //被乘数
+    input  [31:0] in2,   //乘数
+    input         sign,  //是否有符号
+    output [63:0] out    //积
 );
-  localparam WIDTH = 32;
 
   generate
     genvar i;
     //输入层
-    wire [2*WIDTH-1:0] nums[WIDTH];
-    for (i = 0; i < WIDTH; i = i + 1) begin : NUMS_IN_GEN
-      assign nums[i] = in2[i] ? ({{WIDTH{1'b0}}, in1} << i) : {2 * WIDTH{1'b0}};
+    wire [63:0] nums[32];
+    for (i = 0; i < 32; i = i + 1) begin : NUMS_IN_GEN
+      assign nums[i] = in2[i] ? ({{32{sign ? in1[31] : 1'b0}}, in1} << i) : {64{1'b0}};
     end
     //第一层
-    wire [2*WIDTH-1:0] w1[21];  //u11 v11 u12 v12 ... u1a v1a [NUMS[30]]
+    wire [63:0] w1[21];  //u11 v11 u12 v12 ... u1a v1a [NUMS[30]]
     for (i = 0; i < 10; i = i + 1) begin : WALLACE_LEVEL_1
       CSA3T2 #(
           .WIDTH(64)
@@ -29,7 +29,7 @@ module Multiplier32 (  //三十二位快速乘法器
     end
     assign w1[20] = nums[30];
     //第二层
-    wire [2*WIDTH-1:0] w2[15];  //u21 v21 u22 v22 ... u27 v27 [NUMS[31]]
+    wire [63:0] w2[15];  //u21 v21 u22 v22 ... u27 v27 [NUMS[31]]
     for (i = 0; i < 7; i = i + 1) begin : WALLACE_LEVEL_2
       CSA3T2 #(
           .WIDTH(64)
@@ -43,7 +43,7 @@ module Multiplier32 (  //三十二位快速乘法器
     end
     assign w2[14] = nums[31];
     //第三层
-    wire [2*WIDTH-1:0] w3[10];  //u31 v31 ... u35 v35
+    wire [63:0] w3[10];  //u31 v31 ... u35 v35
     for (i = 0; i < 5; i = i + 1) begin : WALLACE_LEVEL_3
       CSA3T2 #(
           .WIDTH(64)
@@ -56,7 +56,7 @@ module Multiplier32 (  //三十二位快速乘法器
       );
     end
     //第四层
-    wire [2*WIDTH-1:0] w4[6];  //u41 v41 ... u43 v43
+    wire [63:0] w4[6];  //u41 v41 ... u43 v43
     for (i = 0; i < 3; i = i + 1) begin : WALLACE_LEVEL_4
       CSA3T2 #(
           .WIDTH(64)
@@ -69,7 +69,7 @@ module Multiplier32 (  //三十二位快速乘法器
       );
     end
     //第五层
-    wire [2*WIDTH-1:0] w5[4];  //u51 v51 u52 v52
+    wire [63:0] w5[4];  //u51 v51 u52 v52
     for (i = 0; i < 2; i = i + 1) begin : WALLACE_LEVEL_5
       CSA3T2 #(
           .WIDTH(64)
@@ -82,7 +82,7 @@ module Multiplier32 (  //三十二位快速乘法器
       );
     end
     //第六层
-    wire [2*WIDTH-1:0] w6[2];
+    wire [63:0] w6[2];
     CSA3T2 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_6_inst (
@@ -93,7 +93,7 @@ module Multiplier32 (  //三十二位快速乘法器
         .cout(w6[1])
     );
     //第七层
-    wire [2*WIDTH-1:0] w7[2];
+    wire [63:0] w7[2];
     CSA3T2 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_7_inst (
@@ -104,7 +104,7 @@ module Multiplier32 (  //三十二位快速乘法器
         .cout(w7[1])
     );
     //第八层
-    wire [2*WIDTH-1:0] w8[2];
+    wire [63:0] w8[2];
     CSA3T2 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_8_inst (
@@ -116,7 +116,7 @@ module Multiplier32 (  //三十二位快速乘法器
     );
     //输出
     Adder #(
-        .WIDTH(2 * WIDTH)
+        .WIDTH(64)
     ) adder64_out (
         .cin (1'b0),
         .in1 (w8[0]),

@@ -9,6 +9,7 @@ module CSA3T2 #(  //Carry Save Adder 3-2
     output [WIDTH-1:0] out,
     output [WIDTH-1:0] cout
 );
+  wire [WIDTH-1:0] wcout;
   generate
     genvar i;
     for (i = 0; i < WIDTH; i = i + 1) begin : gen
@@ -17,8 +18,9 @@ module CSA3T2 #(  //Carry Save Adder 3-2
           .in2 (in2[i]),
           .in3 (in3[i]),
           .out (out[i]),
-          .cout(cout[i])
+          .cout(wcout[i])
       );
     end
   endgenerate
+  assign cout = wcout << 1;
 endmodule

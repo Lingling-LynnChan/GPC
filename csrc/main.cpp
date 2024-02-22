@@ -25,6 +25,7 @@ class VerilatedVcdC {
   void dump(vluint64_t i) {}
 };
 struct VMultiplier32 {
+  uint32_t sign;
   uint32_t in1;
   uint32_t in2;
   uint64_t out;
@@ -52,20 +53,24 @@ int main(int argc, char **argv) {
   // 随机数
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<int32_t> distrib(0, 10);  // 范围
-  int n = 20;                                               // 仿真次数
+  std::uniform_int_distribution<int32_t> distrib(0, INT32_MAX);  // 范围
+  int n = 100;                                               // 仿真次数
+  int32_t hf[2], errnum = 0;                                 // 错误次数
   while (n--) {
-    top->in1 = distrib(gen);                       // 生成被乘数
-    top->in2 = distrib(gen);                       // 生成乘数
-    uint64_t ans = (uint64_t)top->in1 * top->in2;  // 计算值
-    top->eval();                                   // 仿真值
-    printf("%d*%d=%ld,%ld\n", top->in1, top->in2, *(int64_t *)&top->out,
-           *(int64_t *)&ans);
+    hf[0] = distrib(gen);
+    top->in1 = *(uint32_t *)&(hf[0]);  // 生成被乘数
+    hf[1] = distrib(gen);
+    top->in2 = *(uint32_t *)&(hf[1]);               // 生成乘数
+    int64_t ans = (int64_t)hf[0] * (int64_t)hf[1];  // 计算值
+    top->sign = 0;
+    top->eval();
     if (top->out != ans) {
-      printf("ERROR: ANSWER IS %ld\n", *(int64_t *)&ans);
+      errnum++;
+      printf("%d * %d = %ld\n", hf[0], hf[1], top->out);
+      printf("ERROR: ANSWER IS %ld\n", ans);
     }
   }
-
+  printf("HAS %d ERROR(s)\n", errnum);
   std::cout << "====================sim end=============================\n";
   // 释放资源
   vcd->close();
