@@ -14,6 +14,8 @@ V_SOURCES   := $(shell find vsrc -name "*.v")
 
 VERILATOR   := --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL --Wno-PINCONNECTEMPTY --Wno-UNOPTFLAT
 
+all: build sim dump
+
 clean:
 	@echo "====================clean start========================="
 	rm -rf ./build
@@ -65,5 +67,3 @@ ysyxclean:
 	cd ../nemu && make clean
 	cd ../am-kernels/tests/cpu-tests && make clean
 	cd ../abstract-machine && make clean
-
-all: build sim dump
