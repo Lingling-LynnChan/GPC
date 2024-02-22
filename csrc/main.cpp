@@ -54,19 +54,26 @@ int main(int argc, char **argv) {
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<int32_t> distrib(0, INT32_MAX);  // 范围
-  int n = 100;                                               // 仿真次数
-  int32_t hf[2], errnum = 0;                                 // 错误次数
+  int n = 100;                                                   // 仿真次数
+  int32_t hf[2], errnum = 0;                                     // 错误次数
   while (n--) {
     hf[0] = distrib(gen);
     top->in1 = *(uint32_t *)&(hf[0]);  // 生成被乘数
     hf[1] = distrib(gen);
     top->in2 = *(uint32_t *)&(hf[1]);               // 生成乘数
     int64_t ans = (int64_t)hf[0] * (int64_t)hf[1];  // 计算值
+    top->sign = 1;
+    top->eval();
+    if (top->out != ans) {
+      errnum++;
+      printf("SIGN: %d * %d = %ld\n", hf[0], hf[1], top->out);
+      printf("ERROR: ANSWER IS %ld\n", ans);
+    }
     top->sign = 0;
     top->eval();
     if (top->out != ans) {
       errnum++;
-      printf("%d * %d = %ld\n", hf[0], hf[1], top->out);
+      printf("UNSG: %u * %u = %lu\n", hf[0], hf[1], top->out);
       printf("ERROR: ANSWER IS %ld\n", ans);
     }
   }
