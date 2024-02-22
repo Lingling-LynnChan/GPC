@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module Adder64 (  //六十四位超前进位快速加法器
     input         cin,
     input  [63:0] in1,

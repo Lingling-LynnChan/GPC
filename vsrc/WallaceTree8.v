@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module WallaceTree8 #(  //WallaceTree: https://foxsen.github.io/archbase/%E8%BF%90%E7%AE%97%E5%99%A8%E8%AE%BE%E8%AE%A1.html#%E5%8D%8E%E8%8E%B1%E5%A3%AB%E6%A0%91
     WIDTH = 32
 ) (

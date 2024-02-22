@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module Adder08 (  //八位超前进位快速加法器
     input        cin,
     input  [7:0] in1,

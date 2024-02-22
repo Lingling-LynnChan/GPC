@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module HalfAdder (  //一位半加器
     input  in1,
     input  in2,

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module Adder16 (  //十六位超前进位快速加法器
     input         cin,
     input  [15:0] in1,

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module CSA3T2 #(  //Carry Save Adder 3-2
     WIDTH = 32
 ) (

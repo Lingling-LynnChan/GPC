@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module FullAdder (  //一位全加器
     input  in1,
     input  in2,
