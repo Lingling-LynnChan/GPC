@@ -60,9 +60,11 @@ int main(int argc, char **argv) {
     std::uniform_int_distribution<uint32_t> distrib(0, UINT32_MAX);  // 范围
     int n = 1;  // 仿真次数
     uint32_t hf[2];
+    uint64_t max = UINT32_MAX;
+    uint32_t min = max - 1000;
     while (n--) {
-      for (uint64_t i = 0; i < UINT32_MAX; i++) {
-        for (uint64_t j = i; j < UINT32_MAX; j++) {
+      for (uint64_t i = min; i <= max; i++) {
+        for (uint64_t j = i; j <= max; j++) {
           // hf[0] = distrib(gen);
           hf[0] = i;
           top->in1 = hf[0];  // 生成in1
@@ -70,11 +72,11 @@ int main(int argc, char **argv) {
           hf[1] = j;
           top->in2 = hf[1];  // 生成in2
           top->eval();
-          uint32_t ans = hf[0] * hf[1];
-          if (top->out != ans) {
+          uint64_t ans = (uint64_t)hf[0] * hf[1];  // 标准结果
+          if (top->out != ans) {  // 比较仿真结果是否正确
             errnum++;
             printf("UNSG: %u * %u = %lu\n", hf[0], hf[1], top->out);
-            printf("ERROR ANSWER!!!\n");
+            printf("ERROR ANSWER: %lu\n", ans);
           }
         }
       }

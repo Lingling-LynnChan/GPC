@@ -12,7 +12,15 @@ module Multiplier32 (  //三十二位快速乘法器
   );
 endmodule
 
-module Multiplier32_LEVEL_9 (  //三十二位快速乘法器
+module Multiplier32_LEVEL_N (
+    input  [31:0] in1,  //被乘数
+    input  [31:0] in2,  //乘数
+    output [63:0] out   //积
+);
+
+endmodule
+
+module Multiplier32_LEVEL_9 (
     input  [31:0] in1,  //被乘数
     input  [31:0] in2,  //乘数
     output [63:0] out   //积
