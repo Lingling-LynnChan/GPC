@@ -86,8 +86,8 @@ int main(int argc, char **argv) {
   }
   printf("HAS %d ERROR(s)\n", errnum);
 #else
-  uint64_t cin = 0;
-  uint64_t ins[4] = {10, 10, 10, 10};
+  uint64_t cin = 1;
+  uint64_t ins[4] = {UINT32_MAX, UINT32_MAX, 0, UINT32_MAX};
   top->in1 = ins[0];
   top->in2 = ins[1];
   top->in3 = ins[2];
@@ -97,11 +97,10 @@ int main(int argc, char **argv) {
   uint64_t out = top->out;
   uint64_t cout = top->cout;
   uint64_t carry = top->carry;
-  uint64_t sum = (cout << 1) + out + carry;
+  uint64_t sum = (cout << 1) + out + (carry << 32);
   uint64_t ans = ins[0] + ins[1] + ins[2] + ins[3] + cin;
   printf("ANSWER IS %s: (%lu)|(%lu)\n", sum == ans ? "TRUE" : "FALSE", sum,
          ans);
-
 #endif
   std::cout << "====================sim end=============================\n";
   // 释放资源
