@@ -1,4 +1,4 @@
-TOP_MODULE  := Multiplier32
+TOP_MODULE  := CSA4T2
 
 SIM_FILE    := main.cpp
 
