@@ -36,7 +36,7 @@ module Multiplier32_LEVEL_9 (
     //第一层
     wire [63:0] w1[20:0];  //u11 v11 u12 v12 ... u1a v1a [NUMS[30]]
     for (i = 0; i < 10; i = i + 1) begin : WALLACE_LEVEL_1
-      CSA3T2 #(
+      CSA3T2_left1 #(
           .WIDTH(64)
       ) inst (
           .in1 (nums[i*3]),
@@ -51,7 +51,7 @@ module Multiplier32_LEVEL_9 (
     //第二层
     wire [63:0] w2[14:0];  //u21 v21 u22 v22 ... u27 v27 [NUMS[31]]
     for (i = 0; i < 7; i = i + 1) begin : WALLACE_LEVEL_2
-      CSA3T2 #(
+      CSA3T2_left1 #(
           .WIDTH(64)
       ) inst (
           .in1 (w1[i*3]),
@@ -66,7 +66,7 @@ module Multiplier32_LEVEL_9 (
     //第三层
     wire [63:0] w3[9:0];  //u31 v31 ... u35 v35
     for (i = 0; i < 5; i = i + 1) begin : WALLACE_LEVEL_3
-      CSA3T2 #(
+      CSA3T2_left1 #(
           .WIDTH(64)
       ) inst (
           .in1 (w2[i*3]),
@@ -80,7 +80,7 @@ module Multiplier32_LEVEL_9 (
     //第四层
     wire [63:0] w4[5:0];  //u41 v41 ... u43 v43
     for (i = 0; i < 3; i = i + 1) begin : WALLACE_LEVEL_4
-      CSA3T2 #(
+      CSA3T2_left1 #(
           .WIDTH(64)
       ) inst (
           .in1 (w3[i*3]),
@@ -94,7 +94,7 @@ module Multiplier32_LEVEL_9 (
     //第五层
     wire [63:0] w5[3:0];  //u51 v51 u52 v52
     for (i = 0; i < 2; i = i + 1) begin : WALLACE_LEVEL_5
-      CSA3T2 #(
+      CSA3T2_left1 #(
           .WIDTH(64)
       ) inst (
           .in1 (w4[i*3]),
@@ -107,7 +107,7 @@ module Multiplier32_LEVEL_9 (
 
     //第六层
     wire [63:0] w6[1:0];
-    CSA3T2 #(
+    CSA3T2_left1 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_6_CSA3T2_inst (
         .in1 (w5[0]),
@@ -120,7 +120,7 @@ module Multiplier32_LEVEL_9 (
 
     //第七层
     wire [63:0] w7[1:0];
-    CSA3T2 #(
+    CSA3T2_left1 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_7_CSA3T2_inst (
         .in1 (w6[0]),
@@ -133,7 +133,7 @@ module Multiplier32_LEVEL_9 (
 
     //第八层
     wire [63:0] w8[1:0];
-    CSA3T2 #(
+    CSA3T2_left1 #(
         .WIDTH(64)
     ) WALLACE_LEVEL_8_CSA3T2_inst (
         .in1 (w7[0]),
@@ -153,4 +153,29 @@ module Multiplier32_LEVEL_9 (
         .cout()
     );
   endgenerate
+endmodule
+//CSA3T2的左移修正版本
+//虽然不知道为什么要这么做
+//忽略的最高位似乎没有产生影响
+//这是为什么呢？
+module CSA3T2_left1 #(
+    WIDTH = 32
+) (
+    input  [WIDTH-1:0] in1,
+    input  [WIDTH-1:0] in2,
+    input  [WIDTH-1:0] in3,
+    output [WIDTH-1:0] out,
+    output [WIDTH-1:0] cout
+);
+  wire [WIDTH-1:0] wcout;
+  CSA3T2 #(
+      .WIDTH(WIDTH)
+  ) inst (
+      .in1 (in1),
+      .in2 (in2),
+      .in3 (in3),
+      .out (out),
+      .cout(wcout)
+  );
+  assign cout = wcout << 1;
 endmodule
