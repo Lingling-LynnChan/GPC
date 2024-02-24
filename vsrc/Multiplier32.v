@@ -5,18 +5,45 @@ module Multiplier32 (  //三十二位快速乘法器
     input  [31:0] in2,  //乘数
     output [63:0] out   //积
 );
-
+  generate
+    genvar i;
+    wire [63:0] X = {{32{in1[31]}}, in1};
+    wire [63:0] Y = {{32{in2[31]}}, in2};
+    wire [15:0] end_c;
+    for (i = 0; i < 16; i = i + 1) begin
+      Booth #(
+        .WIDTH(64)
+      )booth(
+        .X(),
+        .y(),
+        .P(),
+        .C()
+      );
+    end
+  endgenerate
 endmodule
 
-module Booth (
-    input [31:0] x,
-    input [31:0] y0,
-    input [31:0] y1,
-    input [31:0] y2,
-    output P,
-    output C
+module Booth #(
+    WIDTH = 64
+) (
+    input  [WIDTH-1:0] X,  //被乘数
+    input  [      2:0] y,  //乘数的一部分: i-1, i, i+1
+    output [WIDTH-1:0] P,
+    output             C
 );
-
+  wire [3:0] S;  //-x, +x, -2x, +2x
+  assign S[0] = ~(~(y[2] & y[1] & (~y[0])) & ~(y[2] & (~y[1]) & y[0]));
+  assign S[1] = ~(~((~y[2]) & y[1] & (~y[0])) & ~((~y[2]) & (~y[1]) & y[0]));
+  assign S[2] = ~(y[2] & (~y[1]) & (~y[0]));
+  assign S[3] = ~(~((~y[2]) & y[1] & y[0]));
+  assign C = S[0] | S[2];
+  wire [WIDTH-1:-1] Xi = {X, 1'b0};
+  generate
+    genvar i;
+    for (i = 0; i < WIDTH; i = i + 1) begin
+      assign P[i] = ~(~(S[0] & ~Xi[i]) & ~(S[2] & ~Xi[i-1]) & ~(S[1] & Xi[i]) & ~(S[3] & Xi[i-1]));
+    end
+  endgenerate
 endmodule
 
 module Wallace_8In_6Carry_1Bit (  //八输入六进位的一位华莱士树
