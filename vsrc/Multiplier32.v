@@ -12,12 +12,12 @@ module Multiplier32 (  //三十二位快速乘法器
     wire [15:0] end_c;
     for (i = 0; i < 16; i = i + 1) begin
       Booth #(
-        .WIDTH(64)
-      )booth(
-        .X(),
-        .y(),
-        .P(),
-        .C()
+          .WIDTH(64)
+      ) booth (
+          .X(),
+          .y(),
+          .P(),
+          .C()
       );
     end
   endgenerate
