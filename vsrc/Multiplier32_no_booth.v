@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Multiplier32_LEVEL_9 (
+module Multiplier32_no_booth (
     input  [31:0] in1,  //被乘数
     input  [31:0] in2,  //乘数
     output [63:0] out   //积
