@@ -45,7 +45,6 @@ module Booth #(
     end
   endgenerate
 endmodule
-
 module Wallace_8In_6Carry_1Bit (  //八输入六进位的一位华莱士树
     input  [5:0] cins,
     input  [7:0] ins,
