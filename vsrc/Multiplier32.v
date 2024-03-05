@@ -53,6 +53,7 @@ module Wallace_8In_6Carry_1Bit (  //八输入六进位的一位华莱士树
     output       cout,
     output [5:0] couts
 );
+
   //第一层
   wire w1[2:0];
   FullAdder inst_1_1 (
