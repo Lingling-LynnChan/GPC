@@ -1,12 +1,12 @@
 #include <cstdint>
 #include <iostream>
 #include <random>
-#define NAME VCSA4T2
+#define NAME VMultiplier32
 #ifndef _FAKE_VSCODE_LINT
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 
-#include "VCSA4T2.h"  // 替换为顶层模块的文件名
+#include "VMultiplier32.h"  // 替换为顶层模块的文件名
 #else
 // 欺骗代码提示，假装存在这些类
 typedef volatile uint64_t vluint64_t;
