@@ -52,13 +52,13 @@ module Multiplier32 (  //三十二位快速乘法器
     end
     //特例
     CSA3T2 #(
-          .WIDTH(37)
-      ) CSA3T2_inst2 (
-          .in1 ({3'b0, cout_level_1[9]}),
-          .in2 ({2'b0, sout_level_1[9], 1'b0}),
-          .in3 ({2'b0, partial[30], 3'b0}),
-          .out (sout_level_2[6]),
-          .cout(cout_level_2[6])
-      );
+        .WIDTH(37)
+    ) CSA3T2_inst2 (
+        .in1 ({3'b0, cout_level_1[9]}),
+        .in2 ({2'b0, sout_level_1[9], 1'b0}),
+        .in3 ({2'b0, partial[30], 3'b0}),
+        .out (sout_level_2[6]),
+        .cout(cout_level_2[6])
+    );
   endgenerate
 endmodule
