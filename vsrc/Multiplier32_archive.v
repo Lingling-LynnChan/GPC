@@ -1,8 +1,8 @@
 `timescale 1ns / 1ps
 
-module Multiplier32_unsigned (
-    input [31:0] in1,
+module Multiplier32_archive (
     input is_signed,
+    input [31:0] in1,
     input [31:0] in2,
     output [63:0] out
 );
@@ -23,7 +23,7 @@ module Multiplier32_unsigned (
       .en (is_signed),
       .out(unsigned_in2)
   );
-  
+
   Multiplier32_wallace Multiplier32_inst (
       .in1(unsigned_in1),
       .in2(unsigned_in2),
