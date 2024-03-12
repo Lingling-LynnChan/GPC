@@ -25,11 +25,11 @@ sltu              9 小于（无符号）
   funct3 == 4'h1 &&  //slli指令
   funct3 == 4'h5  //srli和srai指令
   ) ? 1 : 0;
-  Mux_OneHot #(
+  MuxOneHot #(
       .NR_KEY    (10),
       .KEY_WIDTH (12),
       .DATA_WIDTH(10)
-  ) Mux_OneHot_inst (
+  ) MuxOneHot_inst (
       .out(out),
       .sel({funct3, use_funct7_en ? funct7 : 8'b0}),
       .inputs({  //独热码列表
