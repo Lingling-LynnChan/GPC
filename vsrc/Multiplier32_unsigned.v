@@ -1,6 +1,44 @@
 `timescale 1ns / 1ps
 
-module Multiplier32_nobooth (
+module Multiplier32_unsigned (
+    input [31:0] in1,
+    input is_signed,
+    input [31:0] in2,
+    output [63:0] out
+);
+  wire [31:0] unsigned_in1;
+  wire [31:0] unsigned_in2;
+  wire [63:0] unsigned_out;
+  Neg #(
+      .WIDTH(32)
+  ) Neg_in1 (
+      .in (in1),
+      .en (is_signed),
+      .out(unsigned_in1)
+  );
+  Neg #(
+      .WIDTH(32)
+  ) Neg_in2 (
+      .in (in2),
+      .en (is_signed),
+      .out(unsigned_in2)
+  );
+  
+  Multiplier32_wallace Multiplier32_inst (
+      .in1(unsigned_in1),
+      .in2(unsigned_in2),
+      .out(unsigned_out)
+  );
+  Neg #(
+      .WIDTH(64)
+  ) Neg_out (
+      .in (unsigned_out),
+      .en (is_signed),
+      .out(out)
+  );
+endmodule
+
+module Multiplier32_wallace (
     input  [31:0] in1,  //被乘数
     input  [31:0] in2,  //乘数
     output [63:0] out   //积
