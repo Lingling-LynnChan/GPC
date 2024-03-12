@@ -17,8 +17,8 @@ module Regs #(
     output [WIDTH-1:0] doutb  //读输出b
 );
   wire [WIDTH-1:0] douts[NR_REGS];  //单个寄存器输出
-  wire [NR_REGS*WIDTH-1:0] out_lines;  //总输出线
-
+  wire [NR_REGS*(ADDR_WIDTH+WIDTH)-1:0] lut;  //总输出线
+  parameter WD = ADDR_WIDTH + WIDTH;
   begin
     Reg #(  //zero寄存器
         .WIDTH(WIDTH),
@@ -30,10 +30,11 @@ module Regs #(
         .wen (0),
         .dout(douts[0])
     );
-    assign out_lines[(WIDTH-1)-:WIDTH] = douts[0];
+    wire [ADDR_WIDTH-1:0] i0 = 0;
+    assign lut[WD-1:0] = {i0, douts[0]};
   end
-  genvar i;
   generate
+    genvar i;
     for (i = 1; i < NR_REGS; i = i + 1) begin : Reg_Gen
       Reg #(
           .WIDTH(WIDTH),
@@ -45,28 +46,30 @@ module Regs #(
           .wen (wen && (addrw == i)),
           .dout(douts[i])
       );
-      assign out_lines[((i+1)*WIDTH-1)-:WIDTH] = douts[i];
+      wire [ADDR_WIDTH-1:0] iN = i;
+      assign lut[(WD-1)*(i+1)-:WD] = {iN, douts[i]};
     end
   endgenerate
   //读输出a
-  MuxKey #(
-      .NR_KEY  (NR_REGS),
-      .KEY_LEN (ADDR_WIDTH),
-      .DATA_LEN(WIDTH)
+  Mux #(
+      .NR_KEY(NR_REGS),
+      .KEY_WIDTH(ADDR_WIDTH),
+      .DATA_WIDTH(WIDTH)
   ) mux_outa (
       .out(douta),
-      .key(addra),
-      .inlines(out_lines)
+      .sel(addra),
+      .def(0),
+      .lut(lut)
   );
   //读输出b
-  MuxKey #(
-      .NR_KEY  (NR_REGS),
-      .KEY_LEN (ADDR_WIDTH),
-      .DATA_LEN(WIDTH)
+  Mux #(
+      .NR_KEY(NR_REGS),
+      .KEY_WIDTH(ADDR_WIDTH),
+      .DATA_WIDTH(WIDTH)
   ) mux_outb (
       .out(doutb),
-      .key(addrb),
-      .inlines(out_lines)
+      .sel(addrb),
+      .def(0),
+      .lut(lut)
   );
-
 endmodule  //Regs
