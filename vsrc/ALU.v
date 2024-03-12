@@ -8,7 +8,7 @@ module ALU #(
     input  [ WIDTH-1:0] in1,
     input  [ WIDTH-1:0] in2,
     output [ WIDTH-1:0] out,
-    output              valid        //是否属于算数单元处理
+    output              valid    //是否属于算数单元处理
 );
   /*
 alu_code
