@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module MuxOneHot #(
+module MuxOneHot #(  // 1 << i
     NR_KEY     = 2,
     KEY_WIDTH  = 1,
     DATA_WIDTH = 1

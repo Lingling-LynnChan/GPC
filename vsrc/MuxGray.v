@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module MuxGray #(
+module MuxGray #(  // i ^ (i >> 1)
     NR_KEY     = 2,
     KEY_WIDTH  = 1,
     DATA_WIDTH = 1
