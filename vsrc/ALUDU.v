@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 
-module ALU32(
-    input              opc,    //独热码
-    input              valid,  //是否由算数逻辑单元处理
-    input  [31:0] in1,
-    input  [31:0] in2,
-    output [31:0] out
+module ALDU (  //Arithmetic Logic Decode Unit: 把指令译为算数逻辑操作码
+    input [3:0] funct3,
+    input [7:0] funct7,
+    input funct7_en,  //imm指令的funct7是无效的
+    output [10:0] out,
+    output valid
 );
   /*
 alu_code
@@ -20,5 +20,4 @@ sra               7 右移（算数）
 slt               8 小于（有符号）
 sltu              9 小于（无符号）
 */
-
 endmodule
