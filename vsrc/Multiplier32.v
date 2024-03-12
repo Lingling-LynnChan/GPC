@@ -4,9 +4,9 @@ module Multiplier32 (  //三十二位快速乘法器
     output [63:0] out   //积
 );
   generate
-    genvar i;
     //INFO: 部分积(partial product)
     wire [31:0] partial[31:0];
+    genvar i;
     for (i = 0; i < 32; i++) begin
       //这里的部分积保留了位信息
       assign partial[i] = in2[i] ? in1 : 0;
