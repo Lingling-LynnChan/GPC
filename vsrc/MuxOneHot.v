@@ -9,6 +9,10 @@ module MuxOneHot #(  // 1 << i
     input  [       KEY_WIDTH-1:0] sel,
     input  [NR_KEY*KEY_WIDTH-1:0] inputs
 );
+  function [DATA_WIDTH:0] onehot_encode;
+    input [KEY_WIDTH-1:0] in;
+    return 1 << in;
+  endfunction
   wire [NR_KEY*(KEY_WIDTH + DATA_WIDTH)-1:0] lut;
   generate
     genvar i;
