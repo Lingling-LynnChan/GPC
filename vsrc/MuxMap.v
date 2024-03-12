@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module MuxKey #(
+module MuxMap #(
     NR_KEY   = 2,
     KEY_LEN  = 1,
     DATA_LEN = 1

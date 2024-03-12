@@ -27,7 +27,8 @@ sltu              9 小于（无符号）
       .DATA_LEN(10)   //值位宽
   ) MuxMap_inst (
       .out(out),
-      .sel(key),  //选择信号
+      .sel(key),
+      .default_out({OUT_WIDTH{0}}),
       .lut(lut)
   );
 endmodule
