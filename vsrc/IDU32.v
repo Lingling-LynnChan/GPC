@@ -9,6 +9,7 @@ module IDU32 (  //Arithmetic Logic Decode Unit: 把指令译为算数逻辑操�
   parameter OUT_WIDTH = 10;
   /*
 alu_code
+//R指令
 add               0 加
 sub               1 减
 xor               2 异或
@@ -19,6 +20,7 @@ srl               6 右移（逻辑）
 sra               7 右移（算数）
 slt               8 小于（有符号）
 sltu              9 小于（无符号）
+//TODO
 beq               10 等于
 bne               11 不等于
 blt               12 小于（有符号）
