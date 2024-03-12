@@ -47,7 +47,7 @@ module Regs #(
           .dout(douts[i])
       );
       wire [ADDR_WIDTH-1:0] iN = i;
-      assign lut[(WD-1)*(i+1)-:WD] = {iN, douts[i]};
+      assign lut[(WD*(i+1)-1)-:WD] = {iN, douts[i]};
     end
   endgenerate
   //读输出a
