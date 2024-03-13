@@ -1,29 +1,34 @@
 `timescale 1ns / 1ps
 
 module Multiplier32_archive (
-    input is_signed,
-    input [31:0] in1,
-    input [31:0] in2,
+    input         s1,
+    input  [31:0] in1,
+    input         s2,
+    input  [31:0] in2,
     output [63:0] out
 );
   wire [31:0] unsigned_in1;
   wire [31:0] unsigned_in2;
   wire [63:0] unsigned_out;
-  Neg #(
+  wire neg1_en;
+  wire neg2_en;
+  wire nego_en = neg1_en ^ neg2_en;
+  Abs #(
       .WIDTH(32)
-  ) Neg_in1 (
+  ) Abs_inst1 (
+      .en (s1),
       .in (in1),
-      .en (is_signed),
-      .out(unsigned_in1)
+      .out(unsigned_in1),
+      .neg(neg1_en)
   );
-  Neg #(
+  Abs #(
       .WIDTH(32)
-  ) Neg_in2 (
+  ) Abs_inst2 (
+      .en (s2),
       .in (in2),
-      .en (is_signed),
-      .out(unsigned_in2)
+      .out(unsigned_in2),
+      .neg(neg2_en)
   );
-
   Multiplier32_wallace Multiplier32_inst (
       .in1(unsigned_in1),
       .in2(unsigned_in2),
@@ -33,7 +38,7 @@ module Multiplier32_archive (
       .WIDTH(64)
   ) Neg_out (
       .in (unsigned_out),
-      .en (is_signed),
+      .en (nego_en),
       .out(out)
   );
 endmodule

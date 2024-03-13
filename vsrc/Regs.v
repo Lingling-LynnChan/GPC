@@ -52,9 +52,9 @@ module Regs #(
   endgenerate
   //读输出a
   Mux #(
-      .NR_KEY(NR_REGS),
-      .KEY_WIDTH(ADDR_WIDTH),
-      .DATA_WIDTH(WIDTH)
+      .NR(NR_REGS),
+      .KW(ADDR_WIDTH),
+      .DW(WIDTH)
   ) mux_outa (
       .out(douta),
       .sel(addra),
@@ -63,9 +63,9 @@ module Regs #(
   );
   //读输出b
   Mux #(
-      .NR_KEY(NR_REGS),
-      .KEY_WIDTH(ADDR_WIDTH),
-      .DATA_WIDTH(WIDTH)
+      .NR(NR_REGS),
+      .KW(ADDR_WIDTH),
+      .DW(WIDTH)
   ) mux_outb (
       .out(doutb),
       .sel(addrb),

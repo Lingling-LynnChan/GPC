@@ -1,38 +1,38 @@
 `timescale 1ns / 1ps
 
 module Mux #(
-    NR_KEY     = 2,
-    KEY_WIDTH  = 1,
-    DATA_WIDTH = 1
+    NR = 2,  //数据信号数量
+    KW = 1,  //选择信号位宽
+    DW = 1   //数据信号位宽
 ) (
-    output reg [                     DATA_WIDTH-1:0] out,
-    input      [                      KEY_WIDTH-1:0] sel,
-    input      [                     DATA_WIDTH-1:0] def,  //默认输出
-    input      [NR_KEY*(KEY_WIDTH + DATA_WIDTH)-1:0] lut
+    output reg [          DW-1:0] out,
+    input      [          KW-1:0] sel,
+    input      [          DW-1:0] def,  //默认输出
+    input      [NR*(KW + DW)-1:0] lut
 );
-  localparam PAIR_LEN = KEY_WIDTH + DATA_WIDTH;
-  wire [  PAIR_LEN-1:0] pair_list[NR_KEY-1:0];
-  wire [ KEY_WIDTH-1:0] key_list [NR_KEY-1:0];
-  wire [DATA_WIDTH-1:0] data_list[NR_KEY-1:0];
+  localparam KDW = KW + DW;
+  wire [KDW-1:0] kv_list[NR-1:0];
+  wire [ KW-1:0] k_list [NR-1:0];
+  wire [ DW-1:0] v_list [NR-1:0];
 
   generate
     genvar n;
-    for (n = 0; n < NR_KEY; n = n + 1) begin
-      assign pair_list[n] = lut[PAIR_LEN*(n+1)-1 : PAIR_LEN*n];
-      assign data_list[n] = pair_list[n][DATA_WIDTH-1:0];
-      assign key_list[n]  = pair_list[n][PAIR_LEN-1:DATA_WIDTH];
+    for (n = 0; n < NR; n = n + 1) begin
+      assign kv_list[n] = lut[KDW*(n+1)-1 : KDW*n];
+      assign v_list[n]  = kv_list[n][DW-1:0];
+      assign k_list[n]  = kv_list[n][KDW-1:DW];
     end
   endgenerate
 
-  reg [DATA_WIDTH-1 : 0] lut_out;
+  reg [DW-1 : 0] lut_out;
   reg hit;
   integer i;
   always @(*) begin
     lut_out = 0;
     hit = 0;
-    for (i = 0; i < NR_KEY; i = i + 1) begin
-      lut_out = lut_out | ({DATA_WIDTH{sel == key_list[i]}} & data_list[i]);
-      hit = hit | (sel == key_list[i]);
+    for (i = 0; i < NR; i = i + 1) begin
+      lut_out = lut_out | ({DW{sel == k_list[i]}} & v_list[i]);
+      hit = hit | (sel == k_list[i]);
     end
     out = (hit ? lut_out : def);
   end
