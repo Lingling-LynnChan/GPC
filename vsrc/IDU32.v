@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module IDU32 (
+module IDU32 (//Instruction Decode Unit
     input  [          6:0] opcode,
     input  [          3:0] funct3,
     input  [          7:0] funct7,
@@ -105,7 +105,19 @@ module IDU32 (
         {I_TYPE_ALU, 4'h5, 8'h00},  //srli
         {I_TYPE_ALU, 4'h5, 8'h20},  //srai
         {I_TYPE_ALU, 4'h2, 8'hxx},  //slti
-        {I_TYPE_ALU, 4'h3, 8'hxx}  //sltui
+        {I_TYPE_ALU, 4'h3, 8'hxx},  //sltui
+        {I_TYPE_LOD, 4'h0, 8'hxx},  //lb
+        {I_TYPE_LOD, 4'h1, 8'hxx},  //lh
+        {I_TYPE_LOD, 4'h2, 8'hxx},  //lw
+        {I_TYPE_LOD, 4'h4, 8'hxx},  //lbu
+        {I_TYPE_LOD, 4'h5, 8'hxx},  //lhu
+        {S_TYPE_STO, 4'h0, 8'hxx},  //sb
+        {S_TYPE_STO, 4'h1, 8'hxx},  //sh
+        {S_TYPE_STO, 4'h2, 8'hxx},  //sw
+        {B_TYPE_JMP, 4'h0, 8'hxx},  //beq
+        {B_TYPE_JMP, 4'h1, 8'hxx},  //bne
+        {B_TYPE_JMP, 4'h4, 8'hxx},  //blt
+        {B_TYPE_JMP, 4'h5, 8'hxx},  //bge
       })
   );
 endmodule

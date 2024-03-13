@@ -19,8 +19,8 @@ module MuxIdx #(  // i ^ (i >> 1)
     end
   endgenerate
   Mux #(
-      .NR    (NR),
-      .KW (KW),
+      .NR(NR),
+      .KW(KW),
       .DW(DW)
   ) Mux_inst (
       .out(out),
