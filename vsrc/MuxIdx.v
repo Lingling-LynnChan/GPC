@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module MuxIdx #(  // i ^ (i >> 1)
+module MuxIdx #(  //保留0
     NR = 2,  //数据信号数量
     KW = 1,  //选择信号位宽
     DW = 1   //数据信号位宽
@@ -15,7 +15,7 @@ module MuxIdx #(  // i ^ (i >> 1)
     genvar i;
     for (i = 0; i < NR; i++) begin
       assign lut[KDW*i+KW-1:KDW*i] = inputs[KW*i+KW-1:KW*i];
-      assign lut[KDW*i+KDW-1:KDW*i+KW] = i;
+      assign lut[KDW*i+KDW-1:KDW*i+KW] = i + 1;
     end
   endgenerate
   Mux #(

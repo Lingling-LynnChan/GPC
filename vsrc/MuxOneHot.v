@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module MuxOneHot #(  // 1 << i
+module MuxOneHot #(  //独热码全0表示错误
     NR = 2,  //数据信号数量
     KW = 1,  //选择信号位宽
     DW = 1   //数据信号位宽
