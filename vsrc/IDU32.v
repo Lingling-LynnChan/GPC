@@ -7,7 +7,7 @@ module IDU32 (  //Instruction Decode Unit
     output [OUT_WIDTH-1:0] out
 );
   parameter NR_INST = 46;
-  parameter OUT_WIDTH = $clog2(NR_INST);
+  parameter OUT_WIDTH = $clog2(NR_INST + 1);  //加上保留位
   parameter R_TYPE_ALU = 7'b0110011;  //R指令算术逻辑组
   parameter I_TYPE_ALU = 7'b0010011;  //I指令算术逻辑组
   parameter I_TYPE_LOD = 7'b0000011;  //I指令内存读取组
