@@ -16,23 +16,23 @@ module Mux #(
   wire [ DW-1:0] v_list [NR-1:0];
 
   generate
-    genvar n;
-    for (n = 0; n < NR; n = n + 1) begin
-      assign kv_list[n] = lut[KDW*(n+1)-1 : KDW*n];
-      assign v_list[n]  = kv_list[n][DW-1:0];
-      assign k_list[n]  = kv_list[n][KDW-1:DW];
+    genvar i;
+    for (i = 0; i < NR; i = i + 1) begin
+      assign kv_list[i] = lut[KDW*(i+1)-1 : KDW*i];
+      assign v_list[i]  = kv_list[i][DW-1:0];
+      assign k_list[i]  = kv_list[i][KDW-1:DW];
     end
   endgenerate
 
   reg [DW-1 : 0] lut_out;
   reg hit;
-  integer i;
+  integer r;
   always @(*) begin
     lut_out = 0;
     hit = 0;
-    for (i = 0; i < NR; i = i + 1) begin
-      lut_out = lut_out | ({DW{sel == k_list[i]}} & v_list[i]);
-      hit = hit | (sel == k_list[i]);
+    for (r = 0; r < NR; r = r + 1) begin
+      lut_out = lut_out | ({DW{sel == k_list[r]}} & v_list[r]);
+      hit = hit | (sel == k_list[r]);
     end
     out = (hit ? lut_out : def);
   end
