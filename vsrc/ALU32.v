@@ -1,7 +1,8 @@
 `timescale 1ns / 1ps
 
 module ALU32 #(
-    WIDTH = 32
+    WIDTH  = 32,
+    NR_SEL = 8    //指令分支数
 ) (
     input  [      9:0] fun,        //{funct3, funct7: 默认0}
     input  [      5:0] inst_type,
@@ -9,11 +10,22 @@ module ALU32 #(
     input  [WIDTH-1:0] in2,
     output [WIDTH-1:0] out
 );
-  wire signed [WIDTH-1:0] in1_signed = in1;
-  wire [WIDTH-1:0] outs[17:0];
+  wire [WIDTH-1:0] outs    [NR_SEL:0];
+  wire [WIDTH-1:0] in2_sxx;
+  wire             in1_sel;
+  //连线
+  assign in2_sxx = {{(WIDTH - 5) {1'b0}}, in2[4:0]};
+  assign in1_sel = (inst_type[4] & (in2[11:5] == 7'h20)) | (inst_type[5] & fun[6]);
+  assign outs[1] = in1 ^ in2;
+  assign outs[2] = in1 | in2;
+  assign outs[3] = in1 & in2;
+  assign outs[4] = in1 << in2;
+  assign outs[5] = in1_sel ? $signed(in1) >>> in2_sxx : in1 >> in2_sxx;
+  assign outs[6] = $signed(in1) < $signed(in2) ? 1 : 0;
+  assign outs[7] = in1 < in2 ? 1 : 0;
   Mux #(
-      .NR(18),
-      .KW(3),
+      .NR(NR_SEL),
+      .KW(9),
       .DW(WIDTH)
   ) Mux_inst (
       .out(out),
@@ -22,12 +34,12 @@ module ALU32 #(
       .lut({  //输出映射列表
         {3'h0, 6'h0, outs[0]},  //add/sub
         {3'h4, 6'h0, outs[1]},  //xor
-        {3'h6, 6'h0, out[2]},  //or
-        {3'h7, 6'h0, out[3]},  //and
-        {3'h1, 6'h0, out[4]},  //sll
-        {3'h5, 6'h0, out[5]},  //srl/sra
-        {3'h2, 6'h0, out[5]},  //slt
-        {3'h3, 6'h0, out[5]}  //sltu
+        {3'h6, 6'h0, outs[2]},  //or
+        {3'h7, 6'h0, outs[3]},  //and
+        {3'h1, 6'h0, outs[4]},  //sll
+        {3'h5, 6'h0, outs[5]},  //srl/sra
+        {3'h2, 6'h0, outs[6]},  //slt
+        {3'h3, 6'h0, outs[7]}  //sltu
       })
   );
   Adder #(
@@ -39,15 +51,4 @@ module ALU32 #(
       .out (outs[0]),
       .cout()
   );
-  assign outs[2] = in1 ^ in2;
-  assign outs[3] = in1 | in2;
-  assign outs[4] = in1 & in2;
-  assign outs[5] = in1 << in2;
-  assign outs[6] = inst_type[4] ?  //指令类型检验
-      (in2[11] ?  //方法检验
-      in1_signed >>> in2[4:0] :  //I指令算术右移
-      in1 >> in2[4:0]) :  //I指令逻辑右移
-      (fun[6] ?  //方法检验
-      in1_signed >>> in2 :  //R指令算术右移
-      in1 >> in2);  //R指令逻辑右移
 endmodule

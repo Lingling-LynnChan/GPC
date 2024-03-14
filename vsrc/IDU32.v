@@ -28,6 +28,7 @@ module IDU32 #(  //Instruction Decode Unit
 
   wire [ 6:0] opcode = inst[6:0];
   wire [ 2:0] funct3 = inst[14:12];
+  //TODO: 非I指令时funct7输出7'b0
   wire [ 6:0] funct7 = inst[31:25];
   wire [ 4:0] rd = inst[11:7];
   wire [ 4:0] rs1 = inst[19:15];
@@ -38,7 +39,6 @@ module IDU32 #(  //Instruction Decode Unit
   wire [31:0] imm_u;
   wire [31:0] imm_j;
   //TODO: 添加指令分类操作
-  //SLLi、SRLi、SRAi指令需要
 
   //模块连线
   assign fun = {funct3, funct7};
