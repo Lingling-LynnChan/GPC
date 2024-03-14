@@ -49,5 +49,5 @@ module ALU32 #(
       in1 >> in2[4:0]) :  //I指令逻辑右移
       (fun[6] ?  //方法检验
       in1_signed >>> in2 :  //R指令算术右移
-      in1 >> in2);  //R指令逻辑右移
+      in1 >> in2);  //R指令逻辑右移 
 endmodule
