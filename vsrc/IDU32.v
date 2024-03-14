@@ -13,7 +13,8 @@ module IDU32 #(  //Instruction Decode Unit
     output [   WIDTH-1:0] s2imm,   //源2寄存器地址或imm
     output [         9:0] fun,
     output [         6:0] opcode,
-    output [         5:0] itype    //独热码 R I S B U J
+    output [         5:0] itype,   //独热码 R I S B U J
+    output                use_alu
 );
   //信号解析
   wire [2:0] funct3;
@@ -48,6 +49,7 @@ module IDU32 #(  //Instruction Decode Unit
   assign itype[B_TYPE] = opcode == B_TYPE_JMP;
   assign itype[U_TYPE] = opcode == U_TYPE_AUI && opcode == U_TYPE_LUI;
   assign itype[J_TYPE] = opcode == J_TYPE_JMP;
+  assign use_alu = opcode == R_TYPE_ALU || opcode == I_TYPE_ALU;
   IDU32Decoder IDU32Decoder_inst (
       .inst  (inst),
       .opcode(opcode),
