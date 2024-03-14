@@ -1,11 +1,13 @@
 `timescale 1ns / 1ps
 
-module ALU32 (
-    input         opc,    //独热码
-    input         valid,  //是否由算术逻辑单元处理
-    input  [31:0] in1,
-    input  [31:0] in2,
-    output [31:0] out
+module ALU32 #(
+    WIDTH   = 32,
+    NR_INST = 46
+) (
+    input  [OPC_WIDTH-1:0] opc,
+    input  [    WIDTH-1:0] in1,
+    input  [    WIDTH-1:0] in2,
+    output [    WIDTH-1:0] out
 );
-
+  parameter OPC_WIDTH = $clog2(NR_INST + 1);
 endmodule

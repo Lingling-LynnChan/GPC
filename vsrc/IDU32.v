@@ -1,13 +1,14 @@
 `timescale 1ns / 1ps
 
-module IDU32 (  //Instruction Decode Unit
+module IDU32 #(  //Instruction Decode Unit
+    NR_INST = 46
+) (
     input  [          6:0] opcode,
     input  [          3:0] funct3,
     input  [          7:0] funct7,
-    output [OUT_WIDTH-1:0] out
+    output [OPC_WIDTH-1:0] opc
 );
-  parameter NR_INST = 46;
-  parameter OUT_WIDTH = $clog2(NR_INST + 1);  //加上保留位
+  parameter OPC_WIDTH = $clog2(NR_INST + 1);
   parameter R_TYPE_ALU = 7'b0110011;  //R指令算术逻辑组
   parameter I_TYPE_ALU = 7'b0010011;  //I指令算术逻辑组
   parameter I_TYPE_LOD = 7'b0000011;  //I指令内存读取组
@@ -21,9 +22,9 @@ module IDU32 (  //Instruction Decode Unit
   MuxIdx #(
       .NR(NR_INST),
       .KW(19),
-      .DW(OUT_WIDTH)
+      .DW(OPC_WIDTH)
   ) Mux_inst (
-      .out(out),
+      .out(opc),
       .sel({opcode, funct3, funct7}),
       .inputs({  //编码映射列表
         {R_TYPE_ALU, 4'h0, 8'h00},  //add
