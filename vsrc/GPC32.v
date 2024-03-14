@@ -21,6 +21,7 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   wire [WIDTH-1:0] regs_dina;  //寄存器组读数据a
   wire [WIDTH-1:0] regs_dinb;  //寄存器组读数据b
   wire [      9:0] fun;
+  wire [      6:0] opcode;
   wire [WIDTH-1:0] alu_out;
   wire [      5:0] itype;
   wire [WIDTH-1:0] sin1;
@@ -70,10 +71,10 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   ALU32 #(
       .WIDTH(WIDTH)
   ) ALU32_inst (
-      .fun(fun),
+      .fun  (fun),
       .itype(itype),
-      .in1(sin1),
-      .in2(sin2),
-      .out(alu_out)
+      .in1  (sin1),
+      .in2  (sin2),
+      .out  (alu_out)
   );
 endmodule
