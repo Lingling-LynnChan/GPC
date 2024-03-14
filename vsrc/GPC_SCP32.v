@@ -3,7 +3,7 @@
 module GPC_SCP32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
     INST_MAX = 32,
     WIDTH = 32,
-    PC_START = 32'h80000000
+    PC_START = 32'h8000_0000
 ) (
     input                 clk,   //时钟信号
     input                 rst,   //全局复位

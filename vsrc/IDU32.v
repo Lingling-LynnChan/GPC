@@ -9,16 +9,16 @@ module IDU32 #(  //Instruction Decode Unit
     output [OPC_WIDTH-1:0] opc
 );
   parameter OPC_WIDTH = $clog2(NR_INST + 1);
-  parameter R_TYPE_ALU = 7'b0110011;  //R指令算术逻辑组
-  parameter I_TYPE_ALU = 7'b0010011;  //I指令算术逻辑组
-  parameter I_TYPE_LOD = 7'b0000011;  //I指令内存读取组
-  parameter S_TYPE_STO = 7'b0100011;  //S指令内存写回组
-  parameter B_TYPE_JMP = 7'b1100011;  //B指令比较跳转组
-  parameter J_TYPE_JMP = 7'b1101111;  //J指令立即跳转组
-  parameter I_TYPE_JMP = 7'b1100111;  //J指令立即跳转组
-  parameter U_TYPE_LUI = 7'b0110111;  //U指令LUI组
-  parameter U_TYPE_AUI = 7'b0010111;  //U指令AUIPC组
-  parameter I_TYPE_ENV = 7'b1110011;  //I指令环境调用组
+  parameter R_TYPE_ALU = 7'b011_0011;  //R指令算术逻辑组
+  parameter I_TYPE_ALU = 7'b001_0011;  //I指令算术逻辑组
+  parameter I_TYPE_LOD = 7'b000_0011;  //I指令内存读取组
+  parameter S_TYPE_STO = 7'b010_0011;  //S指令内存写回组
+  parameter B_TYPE_JMP = 7'b110_0011;  //B指令比较跳转组
+  parameter J_TYPE_JMP = 7'b110_1111;  //J指令立即跳转组
+  parameter I_TYPE_JMP = 7'b110_0111;  //J指令立即跳转组
+  parameter U_TYPE_LUI = 7'b011_0111;  //U指令LUI组
+  parameter U_TYPE_AUI = 7'b001_0111;  //U指令AUIPC组
+  parameter I_TYPE_ENV = 7'b111_0011;  //I指令环境调用组
   MuxIdx #(
       .NR(NR_INST),
       .KW(19),
