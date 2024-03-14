@@ -8,7 +8,6 @@ module Regs #(
 ) (
     input clk,  //时钟
     input rst,  //复位
-    input wen,  //写使能
     input [ADDR_WIDTH-1:0] addrw,  //写地址
     input [ADDR_WIDTH-1:0] addra,  //读地址a
     input [ADDR_WIDTH-1:0] addrb,  //读地址b
@@ -21,7 +20,7 @@ module Regs #(
   parameter WD = ADDR_WIDTH + WIDTH;
   begin
     Reg #(  //zero寄存器
-        .WIDTH(WIDTH),
+        .WIDTH    (WIDTH),
         .RESET_VAL(0)
     ) Reg_0 (
         .clk (clk),
@@ -37,13 +36,13 @@ module Regs #(
     genvar i;
     for (i = 1; i < NR_REGS; i = i + 1) begin : Reg_Gen
       Reg #(
-          .WIDTH(WIDTH),
+          .WIDTH    (WIDTH),
           .RESET_VAL(RESET_VAL)
       ) inst (
           .clk (clk),
           .rst (rst),
           .din (dinw),
-          .wen (wen && (addrw == i)),
+          .wen (addrw == i),
           .dout(douts[i])
       );
       wire [ADDR_WIDTH-1:0] iN = i;

@@ -1,78 +1,53 @@
 `timescale 1ns / 1ps
 
 module IDU32 #(  //Instruction Decode Unit
-    NR_INST = 46
+    INST_MAX   = 32,
+    WIDTH      = 32,
+    ADDR_WIDTH = 32
 ) (
-    input  [          6:0] opcode,
-    input  [          3:0] funct3,
-    input  [          7:0] funct7,
-    output [OPC_WIDTH-1:0] opc
+    input  [INST_MAX-1:0] inst,
+    output                d0en,
+    output                s1en,
+    output                s2en,
+    output [   WIDTH-1:0] d0,        //目的地址或B指令中的imm
+    output [   WIDTH-1:0] s1,        //源1寄存器地址
+    output [   WIDTH-1:0] s2,        //源2寄存器地址或imm
+    output [         9:0] fun,
+    output [         5:0] inst_type  //独热码 R I S B U J
 );
-  parameter OPC_WIDTH = $clog2(NR_INST + 1);
-  parameter R_TYPE_ALU = 7'b011_0011;  //R指令算术逻辑组
-  parameter I_TYPE_ALU = 7'b001_0011;  //I指令算术逻辑组
-  parameter I_TYPE_LOD = 7'b000_0011;  //I指令内存读取组
-  parameter S_TYPE_STO = 7'b010_0011;  //S指令内存写回组
-  parameter B_TYPE_JMP = 7'b110_0011;  //B指令比较跳转组
-  parameter J_TYPE_JMP = 7'b110_1111;  //J指令立即跳转组
-  parameter I_TYPE_JMP = 7'b110_0111;  //J指令立即跳转组
-  parameter U_TYPE_LUI = 7'b011_0111;  //U指令LUI组
-  parameter U_TYPE_AUI = 7'b001_0111;  //U指令AUIPC组
-  parameter I_TYPE_ENV = 7'b111_0011;  //I指令环境调用组
-  MuxIdx #(
-      .NR(NR_INST),
-      .KW(19),
-      .DW(OPC_WIDTH)
-  ) Mux_inst (
-      .out(opc),
-      .sel({opcode, funct3, funct7}),
-      .inputs({  //编码映射列表
-        {R_TYPE_ALU, 4'h0, 8'h00},  //add
-        {R_TYPE_ALU, 4'h0, 8'h20},  //sub
-        {R_TYPE_ALU, 4'h4, 8'h00},  //xor
-        {R_TYPE_ALU, 4'h6, 8'h00},  //or
-        {R_TYPE_ALU, 4'h7, 8'h00},  //and
-        {R_TYPE_ALU, 4'h1, 8'h00},  //sll
-        {R_TYPE_ALU, 4'h5, 8'h00},  //srl
-        {R_TYPE_ALU, 4'h5, 8'h20},  //sra
-        {R_TYPE_ALU, 4'h2, 8'h00},  //slt
-        {R_TYPE_ALU, 4'h3, 8'h00},  //sltu
-        {I_TYPE_ALU, 4'h0, 8'hxx},  //addi
-        {I_TYPE_ALU, 4'h4, 8'hxx},  //xori
-        {I_TYPE_ALU, 4'h6, 8'hxx},  //ori
-        {I_TYPE_ALU, 4'h7, 8'hxx},  //andi
-        {I_TYPE_ALU, 4'h1, 8'h00},  //slli
-        {I_TYPE_ALU, 4'h5, 8'h00},  //srli
-        {I_TYPE_ALU, 4'h5, 8'h20},  //srai
-        {I_TYPE_ALU, 4'h2, 8'hxx},  //slti
-        {I_TYPE_ALU, 4'h3, 8'hxx},  //sltui
-        {I_TYPE_LOD, 4'h0, 8'hxx},  //lb
-        {I_TYPE_LOD, 4'h1, 8'hxx},  //lh
-        {I_TYPE_LOD, 4'h2, 8'hxx},  //lw
-        {I_TYPE_LOD, 4'h4, 8'hxx},  //lbu
-        {I_TYPE_LOD, 4'h5, 8'hxx},  //lhu
-        {S_TYPE_STO, 4'h0, 8'hxx},  //sb
-        {S_TYPE_STO, 4'h1, 8'hxx},  //sh
-        {S_TYPE_STO, 4'h2, 8'hxx},  //sw
-        {B_TYPE_JMP, 4'h0, 8'hxx},  //beq
-        {B_TYPE_JMP, 4'h1, 8'hxx},  //bne
-        {B_TYPE_JMP, 4'h4, 8'hxx},  //blt
-        {B_TYPE_JMP, 4'h5, 8'hxx},  //bge
-        {B_TYPE_JMP, 4'h6, 8'hxx},  //bltu
-        {B_TYPE_JMP, 4'h7, 8'hxx},  //bgeu
-        {J_TYPE_JMP, 4'hx, 8'hxx},  //jal
-        {I_TYPE_JMP, 4'h0, 8'hxx},  //jalr
-        {U_TYPE_LUI, 4'hx, 8'hxx},  //lui
-        {U_TYPE_AUI, 4'hx, 8'hxx},  //auipc
-        {I_TYPE_ENV, 4'h0, 8'hxx},  //ecall/ebreak imm识别
-        {R_TYPE_ALU, 4'h0, 8'h01},  //mul
-        {R_TYPE_ALU, 4'h1, 8'h01},  //mulh
-        {R_TYPE_ALU, 4'h2, 8'h01},  //mulsu
-        {R_TYPE_ALU, 4'h3, 8'h01},  //mulu
-        {R_TYPE_ALU, 4'h4, 8'h01},  //div
-        {R_TYPE_ALU, 4'h5, 8'h01},  //divu
-        {R_TYPE_ALU, 4'h6, 8'h01},  //rem
-        {R_TYPE_ALU, 4'h7, 8'h01}  //remu
-      })
+  // parameter R_TYPE_ALU = 7'b011_0011;  //R指令算术逻辑组
+  // parameter I_TYPE_ALU = 7'b001_0011;  //I指令算术逻辑组
+  // parameter I_TYPE_LOD = 7'b000_0011;  //I指令内存读取组
+  // parameter S_TYPE_STO = 7'b010_0011;  //S指令内存写回组
+  // parameter B_TYPE_JMP = 7'b110_0011;  //B指令比较跳转组
+  // parameter J_TYPE_JMP = 7'b110_1111;  //J指令立即跳转组
+  // parameter I_TYPE_JMP = 7'b110_0111;  //J指令立即跳转组
+  // parameter U_TYPE_LUI = 7'b011_0111;  //U指令LUI组
+  // parameter U_TYPE_AUI = 7'b001_0111;  //U指令AUIPC组
+  // parameter I_TYPE_ENV = 7'b111_0011;  //I指令环境调用组
+
+  wire [ 6:0] opcode = inst[6:0];
+  wire [ 2:0] funct3 = inst[14:12];
+  wire [ 6:0] funct7 = inst[31:25];
+  wire [ 4:0] rd = inst[11:7];
+  wire [ 4:0] rs1 = inst[19:15];
+  wire [ 4:0] rs2 = inst[24:20];
+  wire [31:0] imm_i;
+  wire [31:0] imm_s;
+  wire [31:0] imm_b;
+  wire [31:0] imm_u;
+  wire [31:0] imm_j;
+  //TODO: 添加指令分类操作
+  //SLLi、SRLi、SRAi指令需要
+
+  //模块连线
+  assign fun = {funct3, funct7};
+  IDU32_Decoder IDU32_Decoder_inst (
+      .inst (inst),
+      .imm_i(imm_i),
+      .imm_s(imm_s),
+      .imm_b(imm_b),
+      .imm_u(imm_u),
+      .imm_j(imm_j)
   );
 endmodule
