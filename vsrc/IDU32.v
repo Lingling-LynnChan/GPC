@@ -1,21 +1,21 @@
 `timescale 1ns / 1ps
-`include "_inst_type.vh"
+`include "InstType.vh"
 module IDU32 #(  //Instruction Decode Unit
     INST_MAX = 32,
     WIDTH    = 32
 ) (
     input  [INST_MAX-1:0] inst,
-    output                d0en,   //是目的寄存器（否则是S/B的imm）
-    output                s1en,   //是源1寄存器（否则无效）
-    output                s2en,   //是源2寄存器（否则是其他的imm）
-    output [   WIDTH-1:0] d0imm,  //目的地址或S/B指令中的imm
-    output [   WIDTH-1:0] s1,     //源1寄存器地址
-    output [   WIDTH-1:0] s2imm,  //源2寄存器地址或imm
+    output                d0en,    //是目的寄存器（否则是S/B的imm）
+    output                s1en,    //是源1寄存器（否则无效）
+    output                s2en,    //是源2寄存器（否则是其他的imm）
+    output [   WIDTH-1:0] d0imm,   //目的地址或S/B指令中的imm
+    output [   WIDTH-1:0] s1,      //源1寄存器地址
+    output [   WIDTH-1:0] s2imm,   //源2寄存器地址或imm
     output [         9:0] fun,
-    output [         5:0] itype   //独热码 R I S B U J
+    output [         6:0] opcode,
+    output [         5:0] itype    //独热码 R I S B U J
 );
   //信号解析
-  wire [6:0] opcode;
   wire [2:0] funct3;
   wire [6:0] funct7;
   wire [4:0] rd = inst[11:7];

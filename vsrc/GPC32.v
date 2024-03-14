@@ -27,7 +27,6 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   wire [WIDTH-1:0] sin2;
   assign sin1 = regsio[1] ? regs_dina : addrs1;
   assign sin2 = regsio[2] ? regs_dinb : addrs2;
-  assign regs_dinw=
   //模块连线
   Regs #(
       .WIDTH     (WIDTH),
@@ -65,15 +64,16 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
       .s1   (addrs1),
       .s2imm(addrs2),
       .fun  (fun),
+      .opcode(opcode),
       .itype(itype)
   );
   ALU32 #(
       .WIDTH(WIDTH)
   ) ALU32_inst (
-      .fun  (fun),
+      .fun(fun),
       .itype(itype),
-      .in1  (sin1),
-      .in2  (sin2),
-      .out  (alu_out)
+      .in1(sin1),
+      .in2(sin2),
+      .out(alu_out)
   );
 endmodule

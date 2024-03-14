@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "_inst_type.vh"
+`include "InstType.vh"
 module IDU32Decoder (  //译码单元解码器
     input  [31:0] inst,
     output [ 6:0] opcode,
