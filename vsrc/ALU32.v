@@ -4,8 +4,8 @@ module ALU32 #(
     WIDTH  = 32,
     NR_SEL = 8    //指令分支数
 ) (
-    input  [      9:0] fun,        //{funct3, funct7: 默认0}
-    input  [      5:0] inst_type,
+    input  [      9:0] fun,    //{funct3, funct7: 默认0}
+    input  [      5:0] itype,
     input  [WIDTH-1:0] in1,
     input  [WIDTH-1:0] in2,
     output [WIDTH-1:0] out
@@ -15,7 +15,7 @@ module ALU32 #(
   wire             in1_sel;
   //连线
   assign in2_sxx = {{(WIDTH - 5) {1'b0}}, in2[4:0]};
-  assign in1_sel = (inst_type[4] & (in2[11:5] == 7'h20)) | (inst_type[5] & fun[6]);
+  assign in1_sel = (itype[4] & (in2[11:5] == 7'h20)) | (itype[5] & fun[6]);
   assign outs[1] = in1 ^ in2;
   assign outs[2] = in1 | in2;
   assign outs[3] = in1 & in2;

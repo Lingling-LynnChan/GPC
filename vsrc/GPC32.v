@@ -22,13 +22,18 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   wire [WIDTH-1:0] regs_dinb;  //寄存器组读数据b
   wire [      9:0] fun;
   wire [WIDTH-1:0] alu_out;
-  wire [      5:0] inst_type;
+  wire [      5:0] itype;
+  wire [WIDTH-1:0] sin1;
+  wire [WIDTH-1:0] sin2;
+  assign sin1 = regsio[1] ? regs_dina : addrs1;
+  assign sin2 = regsio[2] ? regs_dinb : addrs2;
+  assign regs_dinw=
   //模块连线
   Regs #(
-      .WIDTH(WIDTH),
-      .NR_REGS(NR_REGS),
+      .WIDTH     (WIDTH),
+      .NR_REGS   (NR_REGS),
       .ADDR_WIDTH(ADDR_WIDTH),
-      .RESET_VAL(0)
+      .RESET_VAL (0)
   ) Regs_inst (
       .clk  (clk),
       .rst  (rst),
@@ -49,8 +54,8 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
       .pc (pc)
   );
   IDU32 #(
-      .INST_MAX  (INST_MAX),
-      .WIDTH     (WIDTH)
+      .INST_MAX(INST_MAX),
+      .WIDTH   (WIDTH)
   ) IDU32_inst (
       .inst (inst),
       .d0en (regsio[0]),
@@ -60,15 +65,15 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
       .s1   (addrs1),
       .s2imm(addrs2),
       .fun  (fun),
-      .itype(inst_type)
+      .itype(itype)
   );
   ALU32 #(
       .WIDTH(WIDTH)
   ) ALU32_inst (
-      .fun(fun),
-      .inst_type(inst_type),
-      .in1(),
-      .in2(),
-      .out()
+      .fun  (fun),
+      .itype(itype),
+      .in1  (sin1),
+      .in2  (sin2),
+      .out  (alu_out)
   );
 endmodule
