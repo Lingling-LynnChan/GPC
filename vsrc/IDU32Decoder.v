@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "InstType.vh"
+
 module IDU32Decoder (  //译码单元解码器
     input  [31:0] inst,
     output [ 6:0] opcode,
@@ -13,7 +13,7 @@ module IDU32Decoder (  //译码单元解码器
 );
   assign opcode = inst[6:0];
   assign funct3 = inst[14:12];
-  assign funct7 = opcode == R_TYPE_ALU ? inst[31:25] : 7'b0;
+  assign funct7 = opcode == 7'b011_0011 ? inst[31:25] : 7'b0;
   assign imm_i  = {{21{inst[31]}}, inst[30:25], inst[24:21], inst[20]};
   assign imm_s  = {{21{inst[31]}}, inst[30:25], inst[11:8], inst[7]};
   assign imm_b  = {{20{inst[31]}}, inst[7], inst[30:25], inst[11:8], 1'b0};

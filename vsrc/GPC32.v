@@ -25,13 +25,14 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   wire [WIDTH-1:0] alu_out;
   wire [      5:0] itype;
   wire             use_alu;
-  wire [WIDTH-1:0] sin1;
-  wire [WIDTH-1:0] sin2;
-  wire [WIDTH-1:0] rdin;
+  wire [WIDTH-1:0] sin1;  //源1数据
+  wire [WIDTH-1:0] sin2;  //源2数据
+  wire [WIDTH-1:0] rdin;  //除ALU输入之外的其他输入
+  //TODO:
+  //模块连线
   assign sin1 = regsio[1] ? regs_dina : addrs1;
   assign sin2 = regsio[2] ? regs_dinb : addrs2;
   assign regs_dinw = use_alu ? alu_out : rdin;
-  //模块连线
   Regs #(
       .WIDTH     (WIDTH),
       .NR_REGS   (NR_REGS),
