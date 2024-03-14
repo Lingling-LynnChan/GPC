@@ -50,18 +50,17 @@ module GPC32 #(  //Gwen Processor Core: Single Cycle Processor 32 bit
   );
   IDU32 #(
       .INST_MAX  (INST_MAX),
-      .WIDTH     (WIDTH),
-      .ADDR_WIDTH(ADDR_WIDTH)
+      .WIDTH     (WIDTH)
   ) IDU32_inst (
-      .inst(inst),
-      .d0en(regsio[0]),
-      .s1en(regsio[1]),
-      .s2en(regsio[2]),
-      .d0(addrd0),
-      .s1(addrs1),
-      .s2(addrs2),
-      .fun(fun),
-      .inst_type(inst_type)
+      .inst (inst),
+      .d0en (regsio[0]),
+      .s1en (regsio[1]),
+      .s2en (regsio[2]),
+      .d0imm(addrd0),
+      .s1   (addrs1),
+      .s2imm(addrs2),
+      .fun  (fun),
+      .itype(inst_type)
   );
   ALU32 #(
       .WIDTH(WIDTH)

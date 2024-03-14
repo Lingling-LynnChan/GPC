@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Mem #(
+module MEM #(
     WIDTH = 32
 ) (
     input clk,
