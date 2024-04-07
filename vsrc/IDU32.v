@@ -52,7 +52,7 @@ module IDU32 #(  //Instruction Decode Unit
   assign s1en = ~itype[J_TYPE] & ~ienv;
   assign s2en = itype[R_TYPE] | itype[S_TYPE] | itype[B_TYPE];
   //数据获取
-  assign d0imm = d0en ? {27'b0, rd} :  //rd寄存器地址 
+  assign d0imm = d0en ? {27'b0, rd} :  //rd寄存器地址
       itype[S_TYPE] ? imm_s :  //S指令
       itype[B_TYPE] ? imm_b : 0;  //B指令
   assign s1 = s1en ? {27'b0, rs1} : 0;  //rs1寄存器地址
